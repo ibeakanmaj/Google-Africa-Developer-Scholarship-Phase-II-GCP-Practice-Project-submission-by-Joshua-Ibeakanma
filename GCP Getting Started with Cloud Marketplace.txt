@@ -1,0 +1,74 @@
+This is the command line instruction translated for the GCP getting started 
+with Cloud Marketplace qwiklab project in GADS
+
+
+Task 1: Sign in to the Google Cloud Platform (GCP)
+
+Launch installed Google cloud SDK shell and run:
+
+1.  gcloud info
+        to display gcloud tool environment information so you can quickly reference any vital information
+
+2.   gcloud config list
+        to peruse the current gcloud configurations 
+
+3.    gcloud auth login
+        and follow the pop-up windown to complete the login with the practice account credentials
+
+4.    gcloud config set project qwiklabs-gcp-02-d560b9bc1888
+         the provisioned practise account project ID
+
+5.    gcloud config set compute/zone "us-central1-a"
+         compute zone in the provisioned practise account
+
+4. & 5. alternative: run the codes below to set-up project and compute zones
+        CLOUDSDK_CORE_PROJECT=[qwiklabs-gcp-02-d560b9bc1888]
+        CLOUDSDK_COMPUTE_ZONE=[us-central1-a]
+
+
+
+Task 2: Deploy a LAMP stack (without Cloud Marketplace )
+install the individual componenets which are: Linux, Apache HTTP Server, MySQL, PHP & phpMyAdmin
+
+6. Create Linux a virtual machine 
+
+gcloud compute instances create "lampstack-1" \
+--machine-type=n1-standard-1 \
+--subnet=default --network-tier=STANDARD \
+--tags=http-server \
+--image=debian-9-stretch-v20200910 \
+--image-project=debian-cloud \
+--boot-disk-size=10GB \
+--boot-disk-type=pd-standard \
+--boot-disk-device-name=lampstack-1 \
+--reservation-affinity=any
+
+
+7. Install Apache HTTP Server and PHP
+
+sudo apt-get update
+sudo apt-get install apache2 php libapache2-mod-php
+
+
+8. Install MySQL & config
+
+sudo apt-get install mysql-server php-mysql php-pear
+sudo mysql_secure_installation
+
+
+9. Install phpMyAdmin, follow prompt to configure and test
+
+sudo apt-get install phpmyadmin
+http://[YOUR_EXTERNAL_IP_ADDRESS]/phpmyadmin
+
+
+Task 3: Verify your deployment by running the following
+
+10.   gcloud compute ssh lampstack-1
+      cd /opt/bitnami
+      sudo sh -c 'echo "<?php phpinfo(); ?>" > apache2/htdocs/phpinfo.php'
+          copy to a publicly vissible folder
+
+
+11.    http://[EXTERNAL_IP_ADDRESS]/phpinfo.php
+           confirm the webserver is serving new webpage and reachable
