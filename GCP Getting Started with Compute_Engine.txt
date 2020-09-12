@@ -1,0 +1,80 @@
+This is the command line instruction translated for the GCP getting started with compute 
+engine qwiklab project in GADS
+
+
+Task 1: Sign in to the Google Cloud Platform (GCP)
+
+Launch installed Google cloud SDK shell and run:
+
+1.  gcloud info
+        to display gcloud tool environment information so you can quickly reference any vital information
+
+2.   gcloud config list
+        to peruse the current gcloud configurations 
+
+3.    gcloud auth login
+        and follow the pop-up windown to complete the login with the practice account credentials
+
+4.    gcloud config set project qwiklabs-gcp-02-d560b9bc1888
+         the provisioned practise account project ID
+
+5.    gcloud config set compute/zone "us-central1-a"
+         compute zone in the provisioned practise account
+
+4. & 5. alternative: run the codes below to set-up project and compute zones
+        CLOUDSDK_CORE_PROJECT=[qwiklabs-gcp-02-d560b9bc1888]
+        CLOUDSDK_COMPUTE_ZONE=[us-central1-a]
+
+
+Task 2: Create a virtual machine using the GCP Console
+
+6.
+gcloud compute instances create "my-vm-1" \
+--machine-type=n1-standard-1 \
+--subnet=default --network-tier=STANDARD \
+--tags=http-server \
+--image=debian-9-stretch-v20200910 \
+--image-project=debian-cloud \
+--boot-disk-size=10GB \
+--boot-disk-type=pd-standard \
+--boot-disk-device-name=my-vm-1 \
+--reservation-affinity=any
+
+
+
+Task 3: Create a virtual machine using the gcloud command line
+
+7.
+gcloud compute instances create "my-vm-2" \
+--machine-type "n1-standard-1" \
+--image-project "debian-cloud" \
+--image "debian-9-stretch-v20190213" \
+--subnet "default"
+
+
+Task 4: Connect between VM instances
+
+8.    gcloud compute ssh my-vm-1
+          to connect to the first instance
+
+
+9.    sudo apt-get install nginx-light -y
+            install nginx server
+
+
+10.   sudo nano /var/www/html/index.nginx-debian.html
+            edit as you wish
+
+
+11.   curl http://localhost/
+            confirm the webser is running
+
+
+12.     gcloud compute ssh my-vm-2
+        curl http://my-vm-1/
+            confirm the webserver is serving new webpage and reachable from vm-2
+
+
+13.     gcloud compute ssh my-vm-2
+        ping my-vm-1
+            comfirm the first vm is reachable from the second
